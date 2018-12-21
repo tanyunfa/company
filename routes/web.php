@@ -7,5 +7,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('index/index','Admin\IndexController@index');
 
     Route::resource('user','Admin\UserController');
+    Route::post('/user/status','Admin\UserController@status');
 });
 

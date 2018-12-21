@@ -49,7 +49,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.user.edit');
+        $result = User::find($id);
+//        $result -> password = encrypt($result -> password);
+        return view('admin.user.edit',compact('result'));
     }
 
     /**
@@ -57,14 +59,35 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = Input::all();
+        $user = new User();
+        $result = $user -> editUser($data);
+        return response()->json($result);
     }
 
     /**
      * 删除管理员
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        if (User::destroy($id)){
+            return response()->json([
+                'code' => 1,
+                'message' => '添加成功'
+            ]);
+        }else{
+            return response()->json([
+                'code' => 0,
+                'message' => '添加失败'
+            ]);
+        }
+    }
+
+    public function status (Request $request) {
+        $data = $request -> all();
+        $user = new User();
+        $result = $user -> updateStatus($data);
+        return response()->json($result);
+
     }
 }

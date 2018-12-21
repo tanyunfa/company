@@ -18,7 +18,7 @@
                             <label class="col-sm-2 control-label">用户名:</label>
 
                             <div class="col-sm-10">
-                                <input type="text" name="username" class="form-control">
+                                <input type="text" name="username" class="form-control" readonly value="{{$result -> username}}" >
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -41,6 +41,8 @@
                             <label class="col-sm-2 control-label">性别:</label>
 
                             <div class="col-sm-10">
+
+                                @if($result->sex == 1)
                                 <div class="radio i-checks" style="display: inline-block;">
                                     <label>
                                         <input type="radio" value="1" name="sex" checked=""> <i></i> 男</label>
@@ -49,6 +51,16 @@
                                     <label>
                                         <input type="radio" value="2" name="sex"> <i></i> 女</label>
                                 </div>
+                                @else
+                                    <div class="radio i-checks" style="display: inline-block;">
+                                        <label>
+                                            <input type="radio" value="1" name="sex"> <i></i> 男</label>
+                                    </div>
+                                    <div class="radio i-checks" style="display: inline-block;">
+                                        <label>
+                                            <input type="radio" value="2" name="sex" checked=""> <i></i> 女</label>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -56,7 +68,7 @@
                             <label class="col-sm-2 control-label">邮箱:</label>
 
                             <div class="col-sm-10">
-                                <input type="text" name="email" class="form-control">
+                                <input type="text" name="email" class="form-control" value="{{$result -> email}}">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -66,6 +78,8 @@
                             </div>
                         </div>
                         <input type="hidden" value="{{csrf_token()}}" name="_token">
+                        <input type="hidden" value="{{$result -> id}}" name="id">
+                        {{ method_field('PUT') }}
                     </form>
                 </div>
             </div>
@@ -77,7 +91,7 @@
         $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
         $(function () {
             $("#submit-btn").click(function () {
-                var url = '/admin/user';
+                var url = '/admin/user/edit';
                 var data = $('form').serialize();
                 $.post(url,data,function (result) {
                     if (result.code) {

@@ -20,7 +20,7 @@ function layer_show(title,url,w,h){
     if (h == null || h == '') {
         h=($(window).height() - 50);
     };
-    parent.layer.open({
+    layer.open({
         type: 2,
         area: [w+'px', h +'px'],
         fix: false, //不固定
@@ -33,7 +33,7 @@ function layer_show(title,url,w,h){
 /*关闭弹出框口*/
 function layer_close(){
     var index = parent.layer.getFrameIndex(window.name);
-    parent.layer.close(index);
+    parent.layer.close(index);//关闭弹出层
 }
 
 /*时间*/

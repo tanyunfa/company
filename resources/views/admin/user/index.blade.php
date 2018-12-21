@@ -57,18 +57,18 @@
                                     <td>{{$val -> status? '启用': '禁用'}}</td>
                                     <td width="250">
                                     @if($val->status)
-                                            <button class="btn btn-success" type="button">
+                                            <button class="btn btn-success is-enable" data-id="{{$val -> id}}" data-status="{{$val->status}}" type="button">
                                                 <i class="fa fa-check"></i>
                                                 &nbsp;启用
                                             </button>
                                     @else
-                                            <button class="btn btn-warning" type="button">
+                                            <button class="btn btn-warning is-enable" data-id="{{$val -> id}}" data-status="{{$val->status}}" type="button">
                                                 <i class="fa fa-warning"></i>
                                                 &nbsp;禁用
                                             </button>
                                     @endif
-                                        <button type="button" class="btn btn-success">修改</button>
-                                        <button type="button" class="btn btn-danger">删除</button>
+                                        <button type="button" class="btn btn-success edit-btn" data-id="{{$val -> id}}">修改</button>
+                                        <a href="javascript:;" class="btn btn-danger delete-btn" data-id="{{$val -> id}}">删除</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -91,8 +91,46 @@
 @section ('js')
     <script>
         $(function () {
+            var token = '{{csrf_token()}}';
             $("#add-btn").click(function () {
-                layer_show('添加管理员','/admin/user/create',500,800);
+                layer_show('添加管理员','/admin/user/create',500,700);
+            })
+            $(".edit-btn").click(function () {
+                var id = $(this).data('id');
+                layer_show('修改管理员','/admin/user/'+ id +'/edit',500,700);
+            })
+            $(".delete-btn").click(function () {
+                var id = $(this).data('id');
+                layer.confirm('角色删除须谨慎，确认要删除吗？',function(index){
+                    var data = {"_token":token,"_method":"delete"};
+                    var url = '/admin/user/' + id;
+                    $.post(url,data,function (result) {
+                        if (result.code) {
+                            layer.msg(result.message,{icon: 6});
+                            window.location.reload();
+                        }else{
+                            layer.msg(result.message, {icon: 5});
+                        }
+                    })
+                });
+            })
+            $(".is-enable").click(function () {
+                var id = $(this).data('id');
+                var status = $(this).data('status');
+                var data = {
+                    id:id,
+                    status:status,
+                    "_token":token
+                };
+                var url = '/admin/user/status';
+                $.post(url,data,function (result) {
+                    if (result.code) {
+                        layer.msg(result.message,{icon: 6});
+                        window.location.reload();
+                    }else{
+                        layer.msg(result.message, {icon: 5});
+                    }
+                })
             })
         })
     </script>
